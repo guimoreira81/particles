@@ -1,11 +1,11 @@
 game.start()
-const GRAVITY_FORCE = 1000
+const GRAVITY_FORCE = 100
 const PARTICLES_NUMBER = 100
 const START_RANDOM_VELOCITY = 5
-const FRICTION = 0.1
+const FRICTION = 0.075
 const PARTICLES_SIZE = 1
-const TIME_SCALE = 1
-const CLICK_FORCE = 100
+const TIME_SCALE = 5
+const CLICK_FORCE = 150
 
 for (let i=0; i<PARTICLES_NUMBER; i++){
     let particle = new Sprite("player", new Vector2(1, 1).mul(PARTICLES_SIZE), new Vector2(Math.random()*100-50, Math.random()*game.unitY*100-game.unitY*50))
@@ -80,14 +80,11 @@ game.updateFrame = (dt) => {
             colorAttribute.maxValue = particle.velocity.magnitude()
             colorAttribute.maxParticle = particle
         }
-        if (acceleration.magnitude() > colorAttribute.maxValue){
-            colorAttribute.maxValue = acceleration.magnitude()
+        if (particle.velocity.magnitude() > colorAttribute.maxValue){
+            colorAttribute.maxValue = particle.velocity.magnitude()
             colorAttribute.maxParticle = particle
         }
-        let name = Math.floor(acceleration.magnitude()/(colorAttribute.maxValue/1))*9+1
-        if (name > 10){
-            name = 10
-        }
+        let name = Math.floor(particle.velocity.magnitude()/(colorAttribute.maxValue)*9)
         
         particle.image.src = `assets/images/p${name}.png`
         particle.velocity = particle.velocity.mul(1-FRICTION*dt*TIME_SCALE)
